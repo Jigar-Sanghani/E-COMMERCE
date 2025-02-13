@@ -1,7 +1,6 @@
 import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Collection from './pages/Collection'
-import Home from './pages/home'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Product from './pages/Product'
@@ -10,6 +9,8 @@ import Login from './pages/Login'
 import Placeorder from './pages/Placeorder'
 import Orders from './pages/Orders'
 import Navbar from './components/Navbar'
+import Home from './pages/Home'
+import Footer from './components/Footer'
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route path='/place-order' element={<Placeorder />} />
         <Route path='/orders' element={<Orders />} />
       </Routes>
+      <Footer />
     </div>
   )
 }
