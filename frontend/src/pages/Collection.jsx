@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { ShopContext } from '../context/Shopcontext'
 import { assets } from '../assets/assets'
 import Title from '../components/Title'
 import ProductItem from '../components/ProductItem'
+import { ShopContext } from '../context/ShopContext'
 
 const Collection = () => {
 
-  const { products } = useContext(ShopContext)
+  const { products, search, showsearch } = useContext(ShopContext)
   const [showfilter, setshowfilter] = useState(false)
   const [filterproducts, setfilterproducts] = useState([])
   const [category, setcategory] = useState([])
@@ -29,7 +29,6 @@ const Collection = () => {
   const toggleSubcategory = (e) => {
 
     const selectedValue = e.target.value;
-
     if (subcategory.includes(selectedValue)) {
       setsubcategory(prev => prev.filter(item => item !== selectedValue))
     }
@@ -43,6 +42,14 @@ const Collection = () => {
   const applyfilter = () => {
 
     let productscopy = products.slice()
+
+    if (search && showsearch) {
+      productscopy = productscopy.filter(item =>
+        item.name.toLowerCase().includes(search.toLowerCase()) ||
+        item.price.toString().includes(search)
+      );
+    }
+
 
     if (category.length > 0) {
       productscopy = productscopy.filter(item => category.includes(item.category))
@@ -79,7 +86,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyfilter()
-  }, [category, subcategory])
+  }, [category, subcategory, search, showsearch])
 
   useEffect(() => {
     sortproduct()
@@ -141,6 +148,7 @@ const Collection = () => {
             <p className='flex gap-2'>
               <input type="checkbox" className='w-3' value={'Winterwear'} onChange={toggleSubcategory} /> Winterwear
             </p>
+
 
           </div>
 
