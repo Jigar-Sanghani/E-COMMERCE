@@ -10,7 +10,7 @@ const Collection = () => {
   const [showfilter, setshowfilter] = useState(false)
   const [filterproducts, setfilterproducts] = useState([])
   const [category, setcategory] = useState([])
-  const [subcategory, setsubcategory] = useState([])
+  const [subCategory, setsubCategory] = useState([])
   const [sorttype, setsorttype] = useState('relavent')
 
   const toggleCategory = (e) => {
@@ -26,17 +26,17 @@ const Collection = () => {
     }
   }
 
-  const toggleSubcategory = (e) => {
+  const ToggleSubcategory = (e) => {
 
-    const selectedValue = e.target.value;
-    if (subcategory.includes(selectedValue)) {
-      setsubcategory(prev => prev.filter(item => item !== selectedValue))
+    const selected = e.target.value;
+
+    if (subCategory.includes(selected)) {
+      setsubCategory(prev => prev.filter(item => item !== selected))
     }
 
     else {
-      setsubcategory(prev => [...prev, selectedValue])
+      setsubCategory(prev => [...prev, selected])
     }
-
   }
 
   const applyfilter = () => {
@@ -55,8 +55,8 @@ const Collection = () => {
       productscopy = productscopy.filter(item => category.includes(item.category))
     }
 
-    if (subcategory.length > 0) {
-      productscopy = productscopy.filter(item => subcategory.includes(item.subcategory));
+    if (subCategory.length > 0) {
+      productscopy = productscopy.filter(item => subCategory.includes(item.subCategory))
     }
 
     setfilterproducts(productscopy)
@@ -86,7 +86,7 @@ const Collection = () => {
 
   useEffect(() => {
     applyfilter()
-  }, [category, subcategory, search, showsearch])
+  }, [category, subCategory, search, showsearch])
 
   useEffect(() => {
     sortproduct()
@@ -138,15 +138,15 @@ const Collection = () => {
           <div className='flex flex-col gap-2 text-sm font-light text-gray-700'>
 
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3' value={'Topwear'} onChange={toggleSubcategory} /> Topwear
+              <input type="checkbox" className='w-3' value={'Topwear'} onChange={ToggleSubcategory} /> Topwear
             </p>
 
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3' value={'Bottomwear'} onChange={toggleSubcategory} /> Bottomwear
+              <input type="checkbox" className='w-3' value={'Bottomwear'} onChange={ToggleSubcategory} /> Bottomwear
             </p>
 
             <p className='flex gap-2'>
-              <input type="checkbox" className='w-3' value={'Winterwear'} onChange={toggleSubcategory} /> Winterwear
+              <input type="checkbox" className='w-3' value={'Winterwear'} onChange={ToggleSubcategory} /> Winterwear
             </p>
 
 

@@ -7,7 +7,7 @@ import Relatedproduct from '../components/Relatedproduct'
 const Product = () => {
 
   const { productId } = useParams()
-  const { products, currency } = useContext(ShopContext)
+  const { products, currency, addtocart } = useContext(ShopContext)
   const [productdata, setproductdata] = useState(false)
   const [image, setimage] = useState('')
   const [size, setsize] = useState('')
@@ -80,7 +80,7 @@ const Product = () => {
             </div>
           </div>
 
-          <button className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700 cursor-pointer'>ADD TO CART</button>
+          <button onClick={() => addtocart(productdata._id, size)} className='bg-black text-white px-8 py-3 text-sm active:bg-gray-700 cursor-pointer'>ADD TO CART</button>
           <hr className='mt-8 sm:w-4/5' />
 
           <div className='text-sm text-gray-500 mt-5 flex flex-col gap-1'>
@@ -102,15 +102,15 @@ const Product = () => {
         </div>
 
         <div className='flex flex-col gap-4 border px-6 py-6 text-sm text-gray-500'>
-          <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Temporibus non ullam magni.</p>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Similique tempore perspiciatis amet iste voluptas!</p>
+          <p>Discover the latest fashion trends with our online clothing store! From casual wear to elegant outfits, we offer a wide range of stylish and high-quality apparel for men, women, and kids. Shop effortlessly with easy navigation, secure payments, and fast delivery. Elevate your wardrobe today!</p>
+          <p>Step into a world of fashion with our premium e-commerce clothing store! We bring you trendy, comfortable, and affordable clothing for every occasion. Whether you're looking for everyday essentials or statement pieces, our collection has something for everyone. Shop now and redefine your style!</p>
         </div>
 
       </div>
 
       {/* Display Related Product */}
 
-      <Relatedproduct category={productdata.category} subcategory={productdata.subcategory} />
+      <Relatedproduct category={productdata.category} subCategory={productdata.subCategory} />
 
     </div >
 
