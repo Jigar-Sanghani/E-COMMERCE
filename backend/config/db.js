@@ -1,13 +1,10 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+require("dotenv").config();
 
 const db = async () => {
+    await mongoose.connect(process.env.DB_URL)
+    console.log("Connect To The Database ||");
 
-    mongoose.connection.on('connected', () => {
-        console.log("Connect To The Database ||");
-
-    })
-
-    await mongoose.connect(`${process.env.MONGODB_URL}/E-commerce`)
 }
 
-export default db
+module.exports = db;    
