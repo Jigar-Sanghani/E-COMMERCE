@@ -1,23 +1,48 @@
 const User = require("../models/user_models");
 const validator = require('validator');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 
+const createtoken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET_KEY)
+}
 
 const register_User = async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(400).json({ success: false, message: "User already exists" });
+        let isexist = await User.findOne({ email });
+        if (isexist) {
+            return res.json({ success: false, message: "User already exists" });
         }
 
-        user = await User.create({ name, email, password, avatar });
+        if (!validator.isEmail(email)) {
+            return res.json({ success: false, message: "Invalid email format" });
+        }
 
-        const token = user.getJWTToken();
+        if (password.length < 8) {
+            return res.json({ success: false, message: "Please enter a strong password" });
+        }
 
-        res.status(201).json({ success: true, user, token });
+        const salt = await bcrypt.genSalt(10)
+
+        const hasspassword = await bcrypt.hash(password, salt)
+
+        const newuser = new User({
+            name,
+            email,
+            password: hasspassword
+        })
+
+        const user = await newuser.save()
+
+        const token = createtoken(user._id)
+
+        res.json({ success: true, token })
+
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.log(error)
+        res.json({ success: false, message: error.message });
     }
 };
 
@@ -25,44 +50,29 @@ const login_User = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const user = await User.findOne({ email }).select("+password");
+        const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ success: false, message: "Invalid email or password" });
+            return res.json({ success: false, message: "User Not Exists" });
         }
 
-        const isMatch = await user.comparePassword(password);
-        if (!isMatch) {
-            return res.status(400).json({ success: false, message: "Invalid email or password" });
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (isMatch) {
+
+            const token = createtoken(user._id)
+            return res.json({ success: true, token });
         }
 
-        const token = user.getJWTToken();
+        else {
+            res.json({ success: false, message: "Invalid credential" })
+        }
 
-        res.status(200).json({ success: true, user, token });
     } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        res.json({ success: false, error: error.message });
     }
 };
 
 const admin_Login = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-
-        const admin = await User.findOne({ email, role: "admin" }).select("+password");
-        if (!admin) {
-            return res.status(403).json({ success: false, message: "Access denied" });
-        }
-
-        const isMatch = await admin.comparePassword(password);
-        if (!isMatch) {
-            return res.status(400).json({ success: false, message: "Invalid email or password" });
-        }
-
-        const token = admin.getJWTToken();
-
-        res.status(200).json({ success: true, user: admin, token });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+   
 };
 
 
