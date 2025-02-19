@@ -1,10 +1,36 @@
 const { v2: cloudinary } = require('cloudinary');
+const Product = require('../models/product_models');
 
 const listproducts = async (req, res) => {
+    try {
 
-}
+        const products = await Product.find();
+
+        res.json({ success: true, products });
+
+    } catch (error) {
+
+        console.log(error);
+        res.json({ success: false, message: error.message });
+
+    }
+};
 
 const removeproducts = async (req, res) => {
+
+    try {
+
+        const { id } = req.body;
+        await Product.findByIdAndDelete(id)
+        res.json({ success: true, message: "Product deleted successfully" });
+
+
+    } catch (error) {
+
+        console.log(error);
+        res.json({ success: false, message: error.message })
+
+    }
 
 }
 
@@ -23,17 +49,29 @@ const addproducts = async (req, res) => {
 
         let imageurl = await Promise.all(
             images.map(async (item) => {
-                let result = await cloudinary.uploader.upload(item.path,{resource_type:'image'})
+                let result = await cloudinary.uploader.upload(item.path, { resource_type: 'image' })
                 return result.secure_url;
             })
         )
 
+        const productdata = {
+            name,
+            description,
+            category,
+            subcategory,
+            price: Number(price),
+            bestseller: bestseller === "true" ? "true" : "false",
+            sizes: JSON.parse(sizes),
+            image: imageurl,
+            date: Date.now()
+        }
 
-        console.log(name, description, price, category, subcategory, sizes, bestseller);
+        console.log(productdata);
 
-        console.log(imageurl);
+        const product = new Product(productdata)
+        await product.save()
 
-        res.json({})
+        res.json({ success: true, message: "Product Added successfully" })
 
     } catch (error) {
         res.json({ success: false, message: error.message })
@@ -42,6 +80,21 @@ const addproducts = async (req, res) => {
 }
 
 const singleproducts = async (req, res) => {
+
+    try {
+        
+        const {productId}= req.body
+
+        const product = await Product.findById(productId)
+
+        res.json({ success: true, product });
+
+    } catch (error) {
+        
+        console.log(error);
+        res.json({ success: false, message: error.message })
+        
+    }
 
 }
 
