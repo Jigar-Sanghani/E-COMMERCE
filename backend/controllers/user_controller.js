@@ -2,6 +2,7 @@ const User = require("../models/user_models");
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
+require("dotenv").config(); 
 
 const createtoken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET_KEY)
