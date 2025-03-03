@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { assets } from '../assets/assets'
 import axios from 'axios'
 import { backendurl } from '../App'
+import { toast } from 'react-toastify'
 
 const Add = () => {
 
@@ -39,14 +40,36 @@ const Add = () => {
       image4 && formData.append('image4', image4)
 
 
-      const response = await axios.post(backendurl + "/api/product/add", formData)
+      // console.log("sub:" + formData.subcategory);
+      // console.log("category: " + formData.category);
 
-      console.log(response.data);
+
+
+
+      const token = localStorage.getItem('token');
+
+
+      const response = await axios.post(backendurl + "/api/product/add", formData, { headers: { token } })
+
+      if (response.data.success) {
+        toast.success(response.data.message)
+        setname('')
+        setdescription('')
+        setimage1(false)
+        setimage2(false)
+        setimage3(false)
+        setimage4(false)
+        setprice('')
+        setprice('')
+      }
+      else {
+        toast.error(response.data.message)
+      }
 
     } catch (error) {
 
-      console.log(error);
-
+      console.log(error.message);
+      toast.error(error.message)
 
     }
 
@@ -90,7 +113,8 @@ const Add = () => {
       <div className='flex flex-col sm:flex-row gap-2 w-full sm:gap-8'>
         <div>
           <p className='mb-2'>Product Category </p>
-          <select onChange={(e) => setcategory(e.target.value)} className='w-full px-3 py-2'>
+          <select value={category} onChange={(e) => setcategory(e.target.value)} className='w-full px-3 py-2'>
+            <option value="">Select</option>
             <option value="Men">Men</option>
             <option value="Women">Women</option>
             <option value="Kids">Kids</option>
@@ -98,8 +122,9 @@ const Add = () => {
         </div>
 
         <div>
-          <p onChange={(e) => setsubcategory(e.target.value)} className='mb-2'>Sub Category </p>
-          <select className='w-full px-3 py-2'>
+          <p className='mb-2'>Sub Category </p>
+          <select value={subcategory} onChange={(e) => setsubcategory(e.target.value)} className='w-full px-3 py-2'>
+            <option value="">Select</option>
             <option value="Topwear">Topwear</option>
             <option value="Bottomwear">Bottomwear</option>
             <option value="Winterwear">Winterwear</option>

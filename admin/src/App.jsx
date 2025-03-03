@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const backendurl = "http://localhost:4454"
+export const currency = '$'
 
 const App = () => {
 
