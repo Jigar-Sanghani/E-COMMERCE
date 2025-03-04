@@ -39,13 +39,6 @@ const Add = () => {
       image3 && formData.append('image3', image3)
       image4 && formData.append('image4', image4)
 
-
-      // console.log("sub:" + formData.subcategory);
-      // console.log("category: " + formData.category);
-
-
-
-
       const token = localStorage.getItem('token');
 
 
@@ -59,7 +52,6 @@ const Add = () => {
         setimage2(false)
         setimage3(false)
         setimage4(false)
-        setprice('')
         setprice('')
       }
       else {
