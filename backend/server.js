@@ -4,6 +4,7 @@ const db = require('./config/db');
 const connectCloudinary = require('./config/cloudinary');
 const user_router = require('./routes/user_router');
 const product_router = require('./routes/product_router');
+const cart_router = require('./routes/cart_router');
 require("dotenv").config();
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(cors());
 
 app.use('/api/user', user_router)
 app.use('/api/product', product_router)
+app.use('/api/cart', cart_router)
 
 app.get("/", (req, res) => {
     res.send("Hello World! This is the backend server for the E-Commerce website.");

@@ -38,7 +38,7 @@ const register_User = async (req, res) => {
         const user = await newuser.save()
 
         const token = createtoken(user._id)
-        localStorage.setItem("token", token);
+        // localStorage.setItem("token", token);
         res.json({ success: true, token })
 
     } catch (error) {
